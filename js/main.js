@@ -58,7 +58,6 @@ app.controller('PageCtrl', function ($scope) {
   };
 
   $scope.rotateToggle = function() {
-      console.log("what going on")
       if ( controls.autoRotate ) {
         controls.autoRotate = false;
       } else {
@@ -66,16 +65,10 @@ app.controller('PageCtrl', function ($scope) {
       }
   }
 
-  console.log($('#carousel-main').carousel('next'))
-
   // Activates Tooltips for Social Links
   $('.tooltip-social').tooltip({
     selector: "a[data-toggle=tooltip]"
   })
-
-
-
-
 
   // threejs 
   if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
@@ -148,7 +141,7 @@ app.controller('PageCtrl', function ($scope) {
     controls.autoRotate = true;
     controls.autoRotateSpeed = .1;
     controls.enableDamping = true;
-    controls.dampingFactor = 0.2;
+    controls.dampingFactor = 0.4;
     controls.update();
 
     window.addEventListener( 'resize', onWindowResize, false );
@@ -206,7 +199,7 @@ app.controller('PageCtrl', function ($scope) {
       controls.autoRotate = true;
       controls.autoRotateSpeed = 0.1;
       controls.enableDamping = true;
-      controls.dampingFactor = 0.2;
+      controls.dampingFactor = 0.4;
     }
   };
 

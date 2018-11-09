@@ -1,0 +1,89 @@
+<!-- threejs -->
+<div>
+  <div id="scene-viewer"></div>
+</div>
+
+
+<!-- menus and info -->
+<div class="container-fluid h-100 position-absolute menu-panel">
+  <div class="row mt-5">
+    <div class="col-lg-2">
+      <div class="my-4">
+          <h4 class="my-2">Build your city</h4>
+          <p class="my-2">Use the dropdowns below to build a new city borrowing from aspects of existing cities.</p>
+      </div>
+      <div class="dropdown my-2">
+        <h6 class="my-0">Map</h6>
+        <button class="btn btn-light dropdown-toggle w-100 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{map}}
+        </button>
+        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" ng-repeat="(city, value) in cities" ng-click="chooseCity('map',city);">{{city}}</button>
+        </div>
+      </div>
+      <div class="dropdown my-2">
+        <h6 class="my-0">Density</h6>
+        <button class="btn btn-light dropdown-toggle w-100 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{density}}
+        </button>
+        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" ng-repeat="(city, value) in cities" ng-click="chooseCity('density',city);">{{city}}</button>
+        </div>
+      </div>
+      <div class="dropdown my-2">
+        <h6 class="my-0">Buildings</h6>
+        <button class="btn btn-light dropdown-toggle w-100 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{buildings}}
+        </button>
+        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" ng-repeat="(city, value) in cities" ng-click="chooseCity('buildings',city);">{{city}}</button>
+        </div>
+      </div>
+      <div class="dropdown my-2">
+        <h6 class="my-0">Parks</h6>
+        <button class="btn btn-light dropdown-toggle w-100 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{parks}}
+        </button>
+        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" ng-repeat="(city, value) in cities" ng-click="chooseCity('parks',city);">{{city}}</button>
+        </div>
+      </div>
+      <div class="dropdown my-2">
+        <h6 class="my-0">Streets</h6>
+        <button class="btn btn-light dropdown-toggle w-100 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{streets}}
+        </button>
+        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" ng-repeat="(city, value) in cities" ng-click="chooseCity('streets',city);">{{city}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Social Media -->
+  <div class="row fixed-row-bottom justify-content-between w-100 mb-4">
+    <div class="col-lg-2">
+      <h4 class="py-2">Share your city</h4>
+      <div class="socialmediaicons">
+        <button class="btn btn-primary fa fa-twitter w-100 my-1" type="button" aria-haspopup="true" aria-expanded="false">
+        </button>
+        <button class="btn btn-primary fa fa-facebook w-100 my-1" type="button" aria-haspopup="true" aria-expanded="false">
+        </button>
+        <button class="btn btn-primary fa fa-instagram w-100 my-1" type="button" aria-haspopup="true" aria-expanded="false">
+        </button>
+        <button class="btn btn-primary fa fa-pinterest w-100 my-1" type="button" aria-haspopup="true" aria-expanded="false">
+        </button>
+      </div>
+    </div>
+    <div class="col-lg-2">
+      <h4 class="py-2">Settings</h4>
+      <button class="btn btn-light w-100 my-1" type="button" ng-click="rotateToggle()" aria-haspopup="true" aria-expanded="false">Rotate
+      </button>
+      <button class="btn btn-light w-100 my-1" type="button" ng-click="" aria-haspopup="true" aria-expanded="false">Axon View
+      </button>
+      <button class="btn btn-light w-100 my-1" type="button" ng-click="" aria-haspopup="true" aria-expanded="false">Skyline View
+      </button>
+      <button class="btn btn-light w-100 my-1" type="button" ng-click="" aria-haspopup="true" aria-expanded="false">Plan View
+      </button>
+    </div>
+  </div>
+</div>

@@ -39,6 +39,8 @@ app.controller('PageCtrl', function ($scope) {
 
   $scope.imageList = []
 
+  $scope.rotate = true;
+
   var controls;
 
   $scope.images = ["axon_00001","plan_00001","skyline_00001"]
@@ -55,12 +57,16 @@ app.controller('PageCtrl', function ($scope) {
         $scope[input] = city;
       }
 
+      replaceModel();
+
   };
 
   $scope.rotateToggle = function() {
       if ( controls.autoRotate ) {
+        $scope.rotate = false;
         controls.autoRotate = false;
       } else {
+        $scope.rotate = true;
         controls.autoRotate = true;
       }
   }
@@ -100,28 +106,7 @@ app.controller('PageCtrl', function ($scope) {
     directionalLight2.position.set( 1, 1, -1 );
     scene.add( directionalLight2 );
 
-    // texture
-    var manager = new THREE.LoadingManager();
-    manager.onProgress = function ( item, loaded, total ) {
-
-      console.log( item, loaded, total );
-
-    };
-
-    var texture = new THREE.Texture();
-
-    var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.setPath( 'obj/' );
-    mtlLoader.load( 'Shanghai.mtl', function( materials ) {
-      materials.preload();
-      var objLoader = new THREE.OBJLoader();
-      objLoader.setMaterials( materials );
-      objLoader.setPath( 'obj/' );
-      objLoader.load( 'Shanghai.obj', function ( object ) {
-        object.position.y = 0;
-        scene.add( object );
-      });
-    });
+    objLoad();
 
     // set up renderer
     renderer = new THREE.WebGLRenderer();
@@ -133,11 +118,11 @@ app.controller('PageCtrl', function ($scope) {
 
     // set up camera and controls
     camera = new THREE.PerspectiveCamera( 45, (window.innerWidth) / window.innerHeight, 20, 15000 );
-    camera.position.set( 2500, 2500, -2500 );
+    camera.position.set( -1000, 1400, -1800 );
     
     controls = new THREE.OrbitControls( camera, renderer.domElement );
     controls.target.set( 0, 0, 0 );
-    controls.maxDistance = 3000;
+    controls.maxDistance = 4000;
     controls.autoRotate = true;
     controls.autoRotateSpeed = .1;
     controls.enableDamping = true;
@@ -179,6 +164,11 @@ app.controller('PageCtrl', function ($scope) {
 
     render();
 
+    //UPDATE TWEEN
+    TWEEN.update();
+    controls.update();
+
+    // console.log(camera.position)
   }
 
   function render() {
@@ -190,8 +180,55 @@ app.controller('PageCtrl', function ($scope) {
     
   }
 
-  // Options to be added to the GUI
+  function objLoad () {
+    // texture
+    var manager = new THREE.LoadingManager();
+    manager.onProgress = function ( item, loaded, total ) {
 
+      console.log( item, loaded, total );
+
+    };
+
+    var texture = new THREE.Texture();
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setPath( 'obj/' );
+    mtlLoader.load( 'Shanghai.mtl', function( materials ) {
+      materials.preload();
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials( materials );
+      objLoader.setPath( 'obj/' );
+      objLoader.load( 'Shanghai.obj', function ( object ) {
+        object.position.y = 0;
+        scene.add( object );
+      });
+    });
+  };
+
+  var replaceModel = function () {
+    scene.children[3].visible = false;
+    objLoad();
+  }
+
+  // Tweening the camera to a perspective view
+  $scope.tweenCameraView = function (cameraX,cameraY,cameraZ,targetX,targetY,targetZ) {
+    
+    if (controls.autoRotate) {
+      controls.autoRotate = false;
+    }
+
+    var tween = new TWEEN.Tween(camera.position).to({ x: cameraX, y: cameraY, z: cameraZ }, 2000);
+    // tween.delay(10);
+    tween.start();
+          tween.easing(TWEEN.Easing.Exponential.InOut);
+
+    var tween = new TWEEN.Tween(controls.target).to({ x: targetX, y: targetY, z: targetZ }, 2000);
+    // tween.delay(10);
+    tween.start();
+          tween.easing(TWEEN.Easing.Exponential.InOut);
+  }
+
+  // Options to be added to the GUI
   var options = {
     stop: function() {
     },

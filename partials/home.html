@@ -76,13 +76,15 @@
     </div>
     <div class="col-lg-2">
       <h4 class="py-2">Settings</h4>
-      <button class="btn btn-light w-100 my-1" type="button" ng-click="rotateToggle()" aria-haspopup="true" aria-expanded="false">Rotate
+      <button class="btn btn-light w-100 my-1" type="button" ng-click="rotateToggle()" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-check-square-o" ng-class="rotate?'fa-check-square-o':'fa-square-o'"></i>
+        Rotate
       </button>
-      <button class="btn btn-light w-100 my-1" type="button" ng-click="" aria-haspopup="true" aria-expanded="false">Axon View
+      <button class="btn btn-light w-100 my-1" type="button" ng-click="tweenCameraView(-1000,1400,-1800,0,0,0)" aria-haspopup="true" aria-expanded="false">Axon View
       </button>
-      <button class="btn btn-light w-100 my-1" type="button" ng-click="" aria-haspopup="true" aria-expanded="false">Skyline View
+      <button class="btn btn-light w-100 my-1" type="button" ng-click="tweenCameraView(-2200,250,0,0,250,0)" aria-haspopup="true" aria-expanded="false">Skyline View
       </button>
-      <button class="btn btn-light w-100 my-1" type="button" ng-click="" aria-haspopup="true" aria-expanded="false">Plan View
+      <button class="btn btn-light w-100 my-1" type="button" ng-click="tweenCameraView(-10,2400,0,0,0,0)" aria-haspopup="true" aria-expanded="false">Plan View
       </button>
     </div>
   </div>

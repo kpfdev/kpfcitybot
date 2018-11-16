@@ -31,19 +31,17 @@ app.controller('PageCtrl', function ($scope) {
 
   $scope.cities = {'London':0,'New York':1,'Shanghai':2}
 
-  $scope.map = "choose a map"
-  $scope.density = "choose a density"
-  $scope.buildings = "choose buildings"
-  $scope.streets = "choose street widths"
-  $scope.parks = "choose parks"
+  $scope.map = "London"
+  $scope.density = "London"
+  $scope.buildings = "London"
+  $scope.parks = "London"
+  $scope.streets = "London"
 
-  $scope.imageList = []
+  $scope.iteration
 
   $scope.rotate = true;
 
   var controls;
-
-  $scope.images = ["axon_00001","plan_00001","skyline_00001"]
 
   $scope.chooseCity = function(input, city) {
 
@@ -51,14 +49,19 @@ app.controller('PageCtrl', function ($scope) {
         $scope.map = city;
         $scope.density = city;
         $scope.buildings = city;
-        $scope.streets = city;
         $scope.parks = city;
+        $scope.streets = city;
       } else {
         $scope[input] = city;
       }
 
-      replaceModel();
-
+      // d3 management of data.csv
+      d3.csv('/csv/data.csv', function(dataset) {
+        if (dataset.map == $scope.cities[$scope.map] && dataset.density == $scope.cities[$scope.density] && dataset.buildings == $scope.cities[$scope.buildings] && dataset.parks == $scope.cities[$scope.parks] && dataset.streets == $scope.cities[$scope.streets]) {
+          $scope.iteration = dataset.iteration   
+          replaceModel($scope.iteration);   
+        } 
+      }); 
   };
 
   $scope.rotateToggle = function() {
@@ -95,24 +98,35 @@ app.controller('PageCtrl', function ($scope) {
     // scene
     scene = new THREE.Scene();
 
-    var ambient = new THREE.AmbientLight( 0xffc3ff, .9 );
+    var ambient = new THREE.AmbientLight( 0xffffff, 1.6 );
+    ambient.name = "ambientLight"
     scene.add( ambient );
 
-    var directionalLight = new THREE.DirectionalLight( 0xfff1f1, .1 );
-    directionalLight.position.set( -1, 1, 1 );
-    scene.add( directionalLight );
+    var directionalLight1 = new THREE.DirectionalLight( 0xfff1f1, .3 );
+    directionalLight1.name = "directionalLight1"
+    directionalLight1.position.set( -1, 1, 1 );
+    scene.add( directionalLight1 );
 
     var directionalLight2 = new THREE.DirectionalLight( 0xe6f2ff, .2);
+    directionalLight2.name = "directionalLight2"
     directionalLight2.position.set( 1, 1, -1 );
     scene.add( directionalLight2 );
 
-    objLoad();
+    objLoader('london_land', 'land',  0x9c9c9c);
+    objLoader('london_water', 'water',  0x7AACCC);
+    objLoader('london_border', 'border',  0x656565);
+    objLoader('london_bridges', 'bridges',  0xffffff);
+    objLoader('buildings_' + pad(0, 5), 'buildings',  0xffffff);
+    objLoader('parks_' + pad(0, 5), 'parks',  0x9fff9c);
+    objLoader('curbs_' + pad(0, 5), 'curbs',  0xc7c7c7);
+
+    console.log(scene)
 
     // set up renderer
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( (window.innerWidth), window.innerHeight );
-    scene.background = new THREE.Color( 0xaa6caa );
+    scene.background = new THREE.Color( 0xd2d2d2 );
 
     container.appendChild( renderer.domElement );
 
@@ -180,34 +194,73 @@ app.controller('PageCtrl', function ($scope) {
     
   }
 
-  function objLoad () {
-    // texture
-    var manager = new THREE.LoadingManager();
-    manager.onProgress = function ( item, loaded, total ) {
+  // add the leading zeros
+  function pad(num, size ) {
+    var s = "00000" + num;
+    return s.substr(s.length-size);
+  }
 
-      console.log( item, loaded, total );
+  // load the models
+  function objLoader (path, name, color) {
 
+    var material = new THREE.MeshStandardMaterial();
+    material.color = new THREE.Color( color );
+    material.roughness = 1.0;
+
+    // instantiate the loader
+    var loader = new THREE.OBJLoader2();
+
+    // function called on successful load
+    var callbackOnLoad = function ( event ) {
+      group = event.detail.loaderRootNode
+      group.name = name;
+
+      group.traverse(function(obj) {
+        obj.material = material;
+      });
+
+      scene.add( event.detail.loaderRootNode );
     };
 
-    var texture = new THREE.Texture();
+    // load a resource from provided URL synchronously
+    loader.setPath( 'obj/' );
+    loader.setLogging( false, false );
+    loader.load( path + '.obj', callbackOnLoad, null, null, null, false );
+  }
+  
+  // // old obj loader
+  // function objLoad (path) {
+  //   // texture
+  //   var manager = new THREE.LoadingManager();
+  //   manager.onProgress = function ( item, loaded, total ) {
 
-    var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.setPath( 'obj/' );
-    mtlLoader.load( 'Shanghai.mtl', function( materials ) {
-      materials.preload();
-      var objLoader = new THREE.OBJLoader();
-      objLoader.setMaterials( materials );
-      objLoader.setPath( 'obj/' );
-      objLoader.load( 'Shanghai.obj', function ( object ) {
-        object.position.y = 0;
-        scene.add( object );
-      });
-    });
-  };
+  //     console.log( item, loaded, total );
 
-  var replaceModel = function () {
-    scene.children[3].visible = false;
-    objLoad();
+  //   };
+
+  //   var texture = new THREE.Texture();
+
+  //   var mtlLoader = new THREE.MTLLoader();
+  //   mtlLoader.setPath( 'obj/' );
+  //   mtlLoader.load( path + '.mtl', function( materials ) {
+  //     materials.preload();
+  //     var objLoader = new THREE.OBJLoader();
+  //     objLoader.setMaterials( materials );
+  //     objLoader.setPath( 'obj/' );
+  //     objLoader.load( path + '.obj', function ( object ) {
+  //       object.position.y = 0;
+  //       scene.add( object );
+  //     });
+  //   });
+  // };
+
+  var replaceModel = function (iteration) {
+    scene.remove( scene.getObjectByName( 'buildings' ));
+    scene.remove( scene.getObjectByName( 'parks' ));
+    scene.remove( scene.getObjectByName( 'curbs' ));
+    objLoader('buildings_' + pad(iteration, 5), 'buildings',  0xffffff);
+    objLoader('parks_' + pad(iteration, 5), 'parks',  0x9fff9c);
+    objLoader('curbs_' + pad(iteration, 5), 'curbs',  0xc7c7c7);
   }
 
   // Tweening the camera to a perspective view
@@ -217,55 +270,142 @@ app.controller('PageCtrl', function ($scope) {
       controls.autoRotate = false;
     }
 
-    var tween = new TWEEN.Tween(camera.position).to({ x: cameraX, y: cameraY, z: cameraZ }, 2000);
+    var tween = new TWEEN.Tween(camera.position).to({ x: cameraX, y: cameraY, z: cameraZ }, 1500);
     // tween.delay(10);
     tween.start();
           tween.easing(TWEEN.Easing.Exponential.InOut);
 
-    var tween = new TWEEN.Tween(controls.target).to({ x: targetX, y: targetY, z: targetZ }, 2000);
+    var tween = new TWEEN.Tween(controls.target).to({ x: targetX, y: targetY, z: targetZ }, 1500);
     // tween.delay(10);
     tween.start();
           tween.easing(TWEEN.Easing.Exponential.InOut);
   }
 
-  // Options to be added to the GUI
-  var options = {
-    stop: function() {
-    },
-    reset: function() {
-      controls.autoRotate = true;
-      controls.autoRotateSpeed = 0.1;
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.4;
+
+  // add the data.gui so we can make manual adjustments to the scene
+  function addGui () {
+
+    // Options to be added to the GUI
+    var options = {
+      stop: function() {
+      },
+      reset: function() {
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.1;
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.4;
+      }
+    };
+
+    var gui = new dat.GUI();
+
+    var params = {
+      backgroundColor: '#' + scene.background.getHexString(),
+      colorAmbLight: '#' + scene.getObjectByName( 'ambientLight' ).color.getHexString(),
+      colorDirLight1: '#' + scene.getObjectByName( 'directionalLight1' ).color.getHexString(),
+      colorDirLight2: '#' + scene.getObjectByName( 'directionalLight2' ).color.getHexString(),
+    };
+
+    var objParams = {
+      land: '#' + scene.getObjectByName( 'land' ).children[0].material.color.getHexString(),
+      water: '#' + scene.getObjectByName( 'water' ).children[0].material.color.getHexString(),
+      border: '#' + scene.getObjectByName( 'border' ).children[0].material.color.getHexString(),
+      bridges: '#' + scene.getObjectByName( 'bridges' ).children[0].material.color.getHexString(),
+      buildings: '#' + scene.getObjectByName( 'buildings' ).children[0].material.color.getHexString(),
+      parks: '#' + scene.getObjectByName( 'parks' ).children[0].material.color.getHexString(),
+      curbs: '#' + scene.getObjectByName( 'curbs' ).children[0].material.color.getHexString(),
     }
+
+    var lghtng = gui.addFolder('Lighting');
+    lghtng.addColor( params, 'colorAmbLight' )
+      .onChange( function() { scene.getObjectByName( 'ambientLight' ).color.set( params.colorAmbLight ); } );
+    lghtng.add( scene.getObjectByName( 'ambientLight' ), 'intensity', 0, 3);
+    lghtng.addColor( params, 'colorDirLight1' )
+      .onChange( function() { scene.getObjectByName( 'directionalLight1' ).color.set( params.colorDirLight1 ); } );
+    lghtng.add( scene.getObjectByName( 'directionalLight1' ), 'intensity', 0, 3);
+    lghtng.addColor( params, 'colorDirLight2' )
+      .onChange( function() { scene.getObjectByName( 'directionalLight2' ).color.set( params.colorDirLight2 ); } );
+    lghtng.add( scene.getObjectByName( 'directionalLight2' ), 'intensity', 0, 3);
+    lghtng.open();
+
+    var scn = gui.addFolder('Scene');
+    scn.addColor( params, 'backgroundColor' )
+      .onChange( function() { scene.background.set( params.backgroundColor ); } );
+
+    scn.addColor( objParams, 'land' )
+      .onChange( function() { scene.getObjectByName( 'land' ).traverse( function(child) {
+      if (child instanceof THREE.Mesh) {
+        child.material.color.set( objParams.land )
+      }})
+    });
+
+    scn.addColor( objParams, 'water' )
+      .onChange( function() { scene.getObjectByName( 'water' ).traverse( function(child) {
+      if (child instanceof THREE.Mesh) {
+        child.material.color.set( objParams.water )
+      }})
+    });
+
+    scn.addColor( objParams, 'border' )
+      .onChange( function() { scene.getObjectByName( 'border' ).traverse( function(child) {
+      if (child instanceof THREE.Mesh) {
+        child.material.color.set( objParams.border )
+      }})
+    });
+
+    scn.addColor( objParams, 'bridges' )
+      .onChange( function() { scene.getObjectByName( 'bridges' ).traverse( function(child) {
+      if (child instanceof THREE.Mesh) {
+        child.material.color.set( objParams.bridges )
+      }})
+    });
+
+    scn.addColor( objParams, 'buildings' )
+      .onChange( function() { scene.getObjectByName( 'buildings' ).traverse( function(child) {
+      if (child instanceof THREE.Mesh) {
+        child.material.color.set( objParams.buildings )
+      }})
+    });
+
+    scn.addColor( objParams, 'parks' )
+      .onChange( function() { scene.getObjectByName( 'parks' ).traverse( function(child) {
+      if (child instanceof THREE.Mesh) {
+        child.material.color.set( objParams.parks )
+      }})
+    });
+
+    scn.addColor( objParams, 'curbs' )
+      .onChange( function() { scene.getObjectByName( 'curbs' ).traverse( function(child) {
+      if (child instanceof THREE.Mesh) {
+        child.material.color.set( objParams.curbs )
+      }})
+    });
+
+    scn.open();
+
+    var cntrls = gui.addFolder('Controls');
+    cntrls.add(controls, 'autoRotate');
+    cntrls.add(controls, 'autoRotateSpeed', 0, 10);
+    cntrls.add(controls, 'enableDamping');
+    cntrls.add(controls, 'dampingFactor', 0, 1);
+    cntrls.open();
+
+    gui.add(options, 'stop');
+    gui.add(options, 'reset');
+
   };
 
-  var gui = new dat.GUI();
+  document.addEventListener('keyup', function (event) {
+    if (event.defaultPrevented) {
+        return;
+    }
 
-  var params = {
-    color: 0xff00ff,
-    colorLight: 0xff00ff
-  };
+    var key = event.key || event.keyCode;
 
-  var lghtng = gui.addFolder('Lighting');
-  lghtng.addColor( params, 'colorLight' )
-      .onChange( function() { scene.children[0].color.set( params.colorLight ); } );
-  lghtng.open();
-
-  var scn = gui.addFolder('Scene');
-  scn.addColor( params, 'color' )
-      .onChange( function() { scene.background.set( params.color ); } );
-  scn.open();
-
-  var cntrls = gui.addFolder('Controls');
-  cntrls.add(controls, 'autoRotate');
-  cntrls.add(controls, 'autoRotateSpeed', 0, 10);
-  cntrls.add(controls, 'enableDamping');
-  cntrls.add(controls, 'dampingFactor', 0, 1);
-  cntrls.open();
-
-  gui.add(options, 'stop');
-  gui.add(options, 'reset');
-
+    if (key === 'Escape' || key === 'Esc' || key === 27) {
+        addGui();
+    }
+  });
+  
 });
 

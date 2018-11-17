@@ -43,23 +43,29 @@ app.controller('PageCtrl', function ($scope) {
 
   var controls;
 
+  // maybe this gets combined with replace city?
   $scope.chooseCity = function(input, city) {
 
-      if ($scope[input].includes("choose")) {
-        $scope.map = city;
-        $scope.density = city;
-        $scope.buildings = city;
-        $scope.parks = city;
-        $scope.streets = city;
-      } else {
-        $scope[input] = city;
+      if (input == "map") {
+        scene.remove( scene.getObjectByName( 'land' ));
+        scene.remove( scene.getObjectByName( 'water' ));
+        scene.remove( scene.getObjectByName( 'border' ));
+        scene.remove( scene.getObjectByName( 'bridges' ));
+        objLoader( city + '_land', 'land',  0x9c9c9c);
+        objLoader( city + '_water', 'water',  0xb7cfde);
+        objLoader( city + '_border', 'border',  0x656565);
+        objLoader( city + '_bridges', 'bridges',  0xffffff);
       }
+
+      
+
+      $scope[input] = city;
 
       // d3 management of data.csv
       d3.csv('/csv/data.csv', function(dataset) {
         if (dataset.map == $scope.cities[$scope.map] && dataset.density == $scope.cities[$scope.density] && dataset.buildings == $scope.cities[$scope.buildings] && dataset.parks == $scope.cities[$scope.parks] && dataset.streets == $scope.cities[$scope.streets]) {
           $scope.iteration = dataset.iteration   
-          replaceModel($scope.iteration);   
+          replaceModel($scope.iteration, $scope.cities[$scope.map]);   
         } 
       }); 
   };
@@ -113,11 +119,15 @@ app.controller('PageCtrl', function ($scope) {
     scene.add( directionalLight2 );
 
     objLoader('london_land', 'land',  0x9c9c9c);
-    objLoader('london_water', 'water',  0x7AACCC);
+    objLoader('london_water', 'water',  0xb7cfde);
     objLoader('london_border', 'border',  0x656565);
     objLoader('london_bridges', 'bridges',  0xffffff);
+    objLoader('london_landmark1', 'landmark1',  0xffd2c0);
+    objLoader('london_landmark2', 'landmark2',  0xffd2c0);
+    objLoader('london_landmark3', 'landmark3',  0xffd2c0);
+    objLoader('london_landmark4', 'landmark4',  0xffd2c0);
     objLoader('buildings_' + pad(0, 5), 'buildings',  0xffffff);
-    objLoader('parks_' + pad(0, 5), 'parks',  0x9fff9c);
+    objLoader('parks_' + pad(0, 5), 'parks',  0x74ac73);
     objLoader('curbs_' + pad(0, 5), 'curbs',  0xc7c7c7);
 
     console.log(scene)
@@ -206,6 +216,7 @@ app.controller('PageCtrl', function ($scope) {
     var material = new THREE.MeshStandardMaterial();
     material.color = new THREE.Color( color );
     material.roughness = 1.0;
+    material.side = THREE.DoubleSide;
 
     // instantiate the loader
     var loader = new THREE.OBJLoader2();
@@ -226,6 +237,21 @@ app.controller('PageCtrl', function ($scope) {
     loader.setPath( 'obj/' );
     loader.setLogging( false, false );
     loader.load( path + '.obj', callbackOnLoad, null, null, null, false );
+  }
+
+  function getCenterPoint(mesh) {
+    var middle = new THREE.Vector3();
+    var geometry = mesh.geometry;
+
+    geometry.computeBoundingBox();
+
+    middle.x = (geometry.boundingBox.max.x + geometry.boundingBox.min.x) / 2;
+    middle.y = 0;
+    middle.z = (geometry.boundingBox.max.z + geometry.boundingBox.min.z) / 2;
+
+    mesh.localToWorld( middle );
+    return middle;
+    console.log(middle)
   }
   
   // // old obj loader
@@ -254,12 +280,12 @@ app.controller('PageCtrl', function ($scope) {
   //   });
   // };
 
-  var replaceModel = function (iteration) {
+  var replaceModel = function (iteration, map) {
     scene.remove( scene.getObjectByName( 'buildings' ));
     scene.remove( scene.getObjectByName( 'parks' ));
     scene.remove( scene.getObjectByName( 'curbs' ));
     objLoader('buildings_' + pad(iteration, 5), 'buildings',  0xffffff);
-    objLoader('parks_' + pad(iteration, 5), 'parks',  0x9fff9c);
+    objLoader('parks_' + pad(iteration, 5), 'parks',  0x74ac73);
     objLoader('curbs_' + pad(iteration, 5), 'curbs',  0xc7c7c7);
   }
 

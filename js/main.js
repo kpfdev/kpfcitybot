@@ -62,7 +62,7 @@ app.controller('PageCtrl', function ($scope) {
       $scope[input] = city;
 
       // d3 management of data.csv
-      d3.csv('..kpfcitybot/csv/data.csv', function(dataset) {
+      d3.csv('../csv/data.csv', function(dataset) {
         if (dataset.map == $scope.cities[$scope.map] && dataset.density == $scope.cities[$scope.density] && dataset.buildings == $scope.cities[$scope.buildings] && dataset.parks == $scope.cities[$scope.parks] && dataset.streets == $scope.cities[$scope.streets]) {
           $scope.iteration = dataset.iteration   
           replaceModel($scope.iteration, $scope.cities[$scope.map]);   

@@ -3,89 +3,96 @@
   <div id="scene-viewer"></div>
 </div>
 
+<nav class="navbar fixed-top justify-content-between">
+  <a class="navbar-brand" href="#">KPF City Bot</a>
 
-<!-- menus and info -->
-<div class="container-fluid h-100 position-absolute menu-panel">
-  <div class="row">
-    <div class="col-lg-2">
-      <div class="my-4">
-          <h4 class="my-2">Build your city</h4>
-          <p class="my-2">Use the dropdowns below to build a new city borrowing from aspects of existing cities.</p>
-      </div>
-      <div class="dropdown my-2">
-        <h6 class="my-0">Map</h6>
-        <button class="btn btn-light dropdown-toggle w-100 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{map}}
-        </button>
-        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-          <button class="dropdown-item" ng-repeat="(city, value) in cities" ng-click="chooseCity('map',city);">{{city}}</button>
-        </div>
-      </div>
-      <div class="dropdown my-2">
-        <h6 class="my-0">Density</h6>
-        <button class="btn btn-light dropdown-toggle w-100 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{density}}
-        </button>
-        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-          <button class="dropdown-item" ng-repeat="(city, value) in cities" ng-click="chooseCity('density',city);">{{city}}</button>
-        </div>
-      </div>
-      <div class="dropdown my-2">
-        <h6 class="my-0">Buildings</h6>
-        <button class="btn btn-light dropdown-toggle w-100 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{buildings}}
-        </button>
-        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-          <button class="dropdown-item" ng-repeat="(city, value) in cities" ng-click="chooseCity('buildings',city);">{{city}}</button>
-        </div>
-      </div>
-      <div class="dropdown my-2">
-        <h6 class="my-0">Parks</h6>
-        <button class="btn btn-light dropdown-toggle w-100 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{parks}}
-        </button>
-        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-          <button class="dropdown-item" ng-repeat="(city, value) in cities" ng-click="chooseCity('parks',city);">{{city}}</button>
-        </div>
-      </div>
-      <div class="dropdown my-2">
-        <h6 class="my-0">Streets</h6>
-        <button class="btn btn-light dropdown-toggle w-100 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{streets}}
-        </button>
-        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-          <button class="dropdown-item" ng-repeat="(city, value) in cities" ng-click="chooseCity('streets',city);">{{city}}</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Social Media -->
-  <div class="row fixed-row-bottom justify-content-between w-100 mb-4">
-    <div class="col-lg-2">
-      <h4 class="py-2">Share your city</h4>
-      <div class="socialmediaicons">
-        <button class="btn btn-primary fa fa-twitter w-100 my-1" type="button" aria-haspopup="true" aria-expanded="false">
-        </button>
-        <button class="btn btn-primary fa fa-facebook w-100 my-1" type="button" aria-haspopup="true" aria-expanded="false">
-        </button>
-        <button class="btn btn-primary fa fa-instagram w-100 my-1" type="button" aria-haspopup="true" aria-expanded="false">
-        </button>
-        <button class="btn btn-primary fa fa-pinterest w-100 my-1" type="button" aria-haspopup="true" aria-expanded="false">
-        </button>
-      </div>
-    </div>
-    <div class="col-lg-2">
-      <h4 class="py-2">Settings</h4>
-      <button class="btn btn-light w-100 my-1" type="button" ng-click="rotateToggle()" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-check-square-o" ng-class="rotate?'fa-check-square-o':'fa-square-o'"></i>
+  <form class="form-inline">
+    <!-- button for rotate -->
+    <div>
+      <button class="btn btn-outline-primary" type="button" ng-click="rotateToggle()" aria-haspopup="true" aria-expanded="false">
         Rotate
       </button>
-      <button class="btn btn-light w-100 my-1" type="button" ng-click="tweenCameraView(-1000,1400,-1800,0,0,0)" aria-haspopup="true" aria-expanded="false">Axon View
+    </div>
+
+    <!-- dropdown for views -->
+    <div class="dropdown">
+      <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span>Views</span>
       </button>
-      <button class="btn btn-light w-100 my-1" type="button" ng-click="tweenCameraView(-2200,250,0,0,250,0)" aria-haspopup="true" aria-expanded="false">Skyline View
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+        <button class="btn btn-outline-primary" type="button" ng-click="tweenCameraView(-1000,1400,-1800,0,0,0)" aria-haspopup="true" aria-expanded="false">
+          <span>Axon</span>
+        </button>
+        <button class="btn btn-outline-primary" type="button" ng-click="tweenCameraView(-2200,250,0,0,250,0)" aria-haspopup="true" aria-expanded="false">
+          <span>Skyline</span>
+        </button>
+        <button class="btn btn-outline-primary" type="button" ng-click="tweenCameraView(-10,2400,0,0,0,0)" aria-haspopup="true" aria-expanded="false">
+          <span>Plan</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- dropdown for social media -->
+    <div class="dropdown">
+      <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span>Share</span>
       </button>
-      <button class="btn btn-light w-100 my-1" type="button" ng-click="tweenCameraView(-10,2400,0,0,0,0)" aria-haspopup="true" aria-expanded="false">Plan View
-      </button>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+        <button class="btn btn-circle text-light fa fa-twitter" type="button" aria-haspopup="true" aria-expanded="false">
+        </button>
+        <br>
+        <button class="btn btn-circle text-light fa fa-facebook" type="button" aria-haspopup="true" aria-expanded="false">
+        </button>
+        <br>
+        <button class="btn btn-circle text-light fa fa-instagram" type="button" aria-haspopup="true" aria-expanded="false">
+        </button>
+        <br>
+        <button class="btn btn-circle text-light fa fa-pinterest" type="button" aria-haspopup="true" aria-expanded="false">
+        </button>
+      </div>
+    </div>
+
+  </form>
+</nav>
+
+<nav class="navbar fixed-bottom text-light">
+  <div class="row w-100">
+    <div class="col-lg-2 text-center"
+      <h6 class="my-0">Map</h6>
+      <div class="w-100" aria-labelledby="dropdownMenuButton">
+        <button class="btn btn-outline-primary btn-sm " ng-repeat="(city, value) in cities" ng-click="chooseCity('map',city);">{{ citiesShort[city] }}</button>
+      </div>
+    </div>
+    <div class="col-lg-2 text-center"
+      <h6 class="my-0">Density</h6>
+      <div class="w-100" aria-labelledby="dropdownMenuButton">
+        <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-click="chooseCity('density',city);">{{ citiesShort[city] }}</button>
+      </div>
+    </div>
+    <div class="col-lg-2 text-center"
+      <h6 class="my-0">Buildings</h6>
+      <div class="w-100" aria-labelledby="dropdownMenuButton">
+        <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-click="chooseCity('buildings',city);">{{ citiesShort[city] }}</button>
+      </div>
+    </div>
+    <div class="col-lg-2 text-center"
+      <h6 class="my-0">Parks</h6>
+      <div class="w-100" aria-labelledby="dropdownMenuButton">
+        <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-click="chooseCity('parks',city);">{{ citiesShort[city] }}</button>
+      </div>
+    </div>
+    <div class="col-lg-2 text-center"
+      <h6 class="my-0">Street Widths</h6>
+      <div class="w-100" aria-labelledby="dropdownMenuButton">
+        <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-click="chooseCity('streets',city);">{{ citiesShort[city] }}</button>
+      </div>
+    </div>
+    <div class="col-lg-2 text-center"
+      <div class="w-100" aria-labelledby="dropdownMenuButton">
+        <button class="btn btn-outline-primary">See Metrics</button>
+      </div>
     </div>
   </div>
-</div>
+</nav>
+
+<div id="my-gui-container"></div>

@@ -17,7 +17,7 @@ app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     // Home
     .when("/", {templateUrl: "partials/home.html", controller: "PageCtrl"})
-    // Pages
+    //
     .when("/about", {templateUrl: "partials/about.html", controller: "PageCtrl"})
     // else 404
     .otherwise("/404", {templateUrl: "partials/404.html", controller: "PageCtrl"});
@@ -30,6 +30,7 @@ app.controller('PageCtrl', function ($scope) {
   console.log("Page Controller reporting for duty.");
 
   $scope.cities = {'London':0,'New York':1,'Shanghai':2}
+  $scope.citiesShort = {'London':'LND', 'New York': 'NYC', 'Shanghai': 'SHA' }
 
   $scope.map = "London"
   $scope.density = "London"
@@ -57,17 +58,15 @@ app.controller('PageCtrl', function ($scope) {
         objLoader( city + '_bridges', 'bridges',  0xffffff);
       }
 
-      
-
       $scope[input] = city;
 
       // d3 management of data.csv
-      d3.csv('/kpfcitybot/csv/data.csv', function(dataset) {
+      d3.csv('../csv/data.csv', function(dataset) {
         if (dataset.map == $scope.cities[$scope.map] && dataset.density == $scope.cities[$scope.density] && dataset.buildings == $scope.cities[$scope.buildings] && dataset.parks == $scope.cities[$scope.parks] && dataset.streets == $scope.cities[$scope.streets]) {
-          $scope.iteration = dataset.iteration   
-          replaceModel($scope.iteration, $scope.cities[$scope.map]);   
-        } 
-      }); 
+          $scope.iteration = dataset.iteration
+          replaceModel($scope.iteration, $scope.cities[$scope.map]);
+        }
+      });
   };
 
   $scope.rotateToggle = function() {
@@ -85,7 +84,7 @@ app.controller('PageCtrl', function ($scope) {
     selector: "a[data-toggle=tooltip]"
   })
 
-  // threejs 
+  // threejs
   if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
   var container, stats, controls;
@@ -104,7 +103,7 @@ app.controller('PageCtrl', function ($scope) {
     // scene
     scene = new THREE.Scene();
 
-    var ambient = new THREE.AmbientLight( 0xffffff, 1.6 );
+    var ambient = new THREE.AmbientLight( 0xe8ecff, 1.6 );
     ambient.name = "ambientLight"
     scene.add( ambient );
 
@@ -136,14 +135,14 @@ app.controller('PageCtrl', function ($scope) {
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( (window.innerWidth), window.innerHeight );
-    scene.background = new THREE.Color( 0xd2d2d2 );
+    scene.background = new THREE.Color( 0x1a2050 );
 
     container.appendChild( renderer.domElement );
 
     // set up camera and controls
     camera = new THREE.PerspectiveCamera( 45, (window.innerWidth) / window.innerHeight, 20, 15000 );
     camera.position.set( -1000, 1400, -1800 );
-    
+
     controls = new THREE.OrbitControls( camera, renderer.domElement );
     controls.target.set( 0, 0, 0 );
     controls.maxDistance = 4000;
@@ -201,7 +200,7 @@ app.controller('PageCtrl', function ($scope) {
     controls.update();
 
     renderer.render( scene, camera );
-    
+
   }
 
   // add the leading zeros
@@ -253,7 +252,7 @@ app.controller('PageCtrl', function ($scope) {
     return middle;
     console.log(middle)
   }
-  
+
   // // old obj loader
   // function objLoad (path) {
   //   // texture
@@ -291,7 +290,7 @@ app.controller('PageCtrl', function ($scope) {
 
   // Tweening the camera to a perspective view
   $scope.tweenCameraView = function (cameraX,cameraY,cameraZ,targetX,targetY,targetZ) {
-    
+
     if (controls.autoRotate) {
       controls.autoRotate = false;
     }
@@ -323,7 +322,10 @@ app.controller('PageCtrl', function ($scope) {
       }
     };
 
-    var gui = new dat.GUI();
+    var gui = new dat.GUI({ autoplace: false });
+
+    // place the gui in a more useful location
+    gui.domElement.id = 'my-gui-container';
 
     var params = {
       backgroundColor: '#' + scene.background.getHexString(),
@@ -432,6 +434,5 @@ app.controller('PageCtrl', function ($scope) {
         addGui();
     }
   });
-  
-});
 
+});

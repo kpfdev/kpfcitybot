@@ -18,6 +18,21 @@ body {
   font-family: Monospace;
 }
 
+.btn {
+  margin: .2rem;
+  border-radius: 1rem;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+
 .container-fluid {
   pointer-events: none;
 }
@@ -30,16 +45,32 @@ body {
   pointer-events: all;
 }
 
+.dropdown-menu {
+  min-width: 0rem;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.fa-twitter {
+  background: #55ACEE;
+
+}
+
+.fa-facebook {
+  background: #3B5998;
+}
+
+.fa-instagram {
+  background: #125688;
+}
+
+.fa-pinterest {
+  background: #cb2027;
+}
+
 .fixed-row-bottom {
   position:absolute;
   bottom:0;
-}
-
-#scene-viewer {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
 }
 
 .socialmediaicons .btn {
@@ -48,19 +79,24 @@ body {
   border: none;
 }
 
-.socialmediaicons .fa-twitter {
-  background: #55ACEE;
-
+.fixed-top {
+  background-color: rgba(0, 0, 0, 0);
 }
 
-.socialmediaicons .fa-facebook {
-  background: #3B5998;
+.fixed-bottom {
+  background-color: #051633;
 }
 
-.socialmediaicons .fa-instagram {
-  background: #125688;
+#my-gui-container {
+  position: absolute;
+  top: 60px;
+  right: 0px;
+  z-index: 1000;
 }
 
-.socialmediaicons .fa-pinterest {
-  background: #cb2027;
+#scene-viewer {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }

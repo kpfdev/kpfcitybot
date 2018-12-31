@@ -44,6 +44,20 @@ app.controller('PageCtrl', function ($scope) {
 
   var controls;
 
+  // check for screen size change so that the dom can be updated conditionally
+  $scope.isMobile = testIsMobile()
+
+  function testIsMobile() {
+    var width = $(window).width()
+    var isMobile;
+    if (width < 992) {
+      isMobile = true
+    } else {
+      isMobile = false
+    }
+    return isMobile
+  };
+
   // maybe this gets combined with replace city?
   $scope.chooseCity = function(input, city) {
 
@@ -161,6 +175,9 @@ app.controller('PageCtrl', function ($scope) {
   }
 
   function onWindowResize() {
+
+    $scope.isMobile = testIsMobile()
+    $scope.$apply()
 
     camera.aspect = (window.innerWidth) / window.innerHeight;
     camera.updateProjectionMatrix();

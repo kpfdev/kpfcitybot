@@ -9,7 +9,7 @@
   <form class="form-inline">
     <!-- button for rotate -->
     <div>
-      <button class="btn btn-outline-primary" type="button" ng-click="rotateToggle()" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-outline-primary" ng-class="{'active': rotate == true}" type="button" ng-click="rotateToggle()" aria-haspopup="true" aria-expanded="false">
         Rotate
       </button>
     </div>
@@ -54,40 +54,71 @@
 
   </form>
 </nav>
+<nav class="navbar navbar-expand-lg fixed-bottom text-light">
 
-<nav class="navbar fixed-bottom text-light">
-  <div class="row w-100">
-    <div class="col-lg-2 text-center"
-      <h6 class="my-0">Map</h6>
-      <div class="w-100" aria-labelledby="dropdownMenuButton">
-        <button class="btn btn-outline-primary btn-sm " ng-repeat="(city, value) in cities" ng-click="chooseCity('map',city);">{{ citiesShort[city] }}</button>
+  <div ng-show="isMobile" class="text-center w-100">
+    <button class="btn navbar-toggler text-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon">+</span>
+    </button>
+  </div>
+
+  <div class="row collapse navbar-collapse w-100" id="navbarSupportedContent">
+    <div class="col-lg-2 col-md-12 text-center">
+      <h6 ng-hide="isMobile" ng-hide="isMobile" class="my-0">Map</h6>
+      <div class="row" aria-labelledby="dropdownMenuButton">
+        <div ng-show="isMobile" class="col-4 my-auto">
+          <h6 class="my-0">Maps</h6>
+        </div>
+        <div class="col-lg-12 col-md-8 col-sm-8 col-8">
+          <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-class="{'active':map == city}" ng-click="chooseCity('map',city);">{{ citiesShort[city] }}</button>
+        </div>
       </div>
     </div>
-    <div class="col-lg-2 text-center"
-      <h6 class="my-0">Density</h6>
-      <div class="w-100" aria-labelledby="dropdownMenuButton">
-        <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-click="chooseCity('density',city);">{{ citiesShort[city] }}</button>
+    <div class="col-lg-2 col-md-12 text-center">
+      <h6 ng-hide="isMobile" class="my-0">Density</h6>
+      <div class="row" aria-labelledby="dropdownMenuButton">
+        <div ng-show="isMobile" class="col-4 my-auto">
+          <h6 class="my-0">Density</h6>
+        </div>
+        <div class="col-lg-12 col-md-8 col-sm-8 col-8">
+          <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-class="{'active':density == city}" ng-click="chooseCity('density',city);">{{ citiesShort[city] }}</button>
+        </div>
       </div>
     </div>
-    <div class="col-lg-2 text-center"
-      <h6 class="my-0">Buildings</h6>
-      <div class="w-100" aria-labelledby="dropdownMenuButton">
-        <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-click="chooseCity('buildings',city);">{{ citiesShort[city] }}</button>
+    <div class="col-lg-2 col-md-12 text-center">
+      <h6 ng-hide="isMobile" class="my-0">Buildings</h6>
+      <div class="row" aria-labelledby="dropdownMenuButton">
+        <div ng-show="isMobile" class="col-4 my-auto">
+          <h6 class="my-0">Buildings</h6>
+        </div>
+        <div class="col-lg-12 col-md-8 col-sm-8 col-8">
+          <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-class="{'active':buildings == city}" ng-click="chooseCity('buildings',city);">{{ citiesShort[city] }}</button>
+        </div>
       </div>
     </div>
-    <div class="col-lg-2 text-center"
-      <h6 class="my-0">Parks</h6>
-      <div class="w-100" aria-labelledby="dropdownMenuButton">
-        <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-click="chooseCity('parks',city);">{{ citiesShort[city] }}</button>
+    <div class="col-lg-2 col-md-12 text-center">
+      <h6 ng-hide="isMobile" class="my-0">Parks</h6>
+      <div class="row" aria-labelledby="dropdownMenuButton">
+        <div ng-show="isMobile" class="col-4 my-auto">
+          <h6 class="my-0">Parks</h6>
+        </div>
+        <div class="col-lg-12 col-md-8 col-sm-8 col-8">
+          <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-class="{'active':parks == city}" ng-click="chooseCity('parks',city);">{{ citiesShort[city] }}</button>
+        </div>
       </div>
     </div>
-    <div class="col-lg-2 text-center"
-      <h6 class="my-0">Street Widths</h6>
-      <div class="w-100" aria-labelledby="dropdownMenuButton">
-        <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-click="chooseCity('streets',city);">{{ citiesShort[city] }}</button>
+    <div class="col-lg-2 col-md-12 text-center">
+      <h6 ng-hide="isMobile" class="my-0">Street Widths</h6>
+      <div class="row" aria-labelledby="dropdownMenuButton">
+        <div ng-show="isMobile" class="col-4 my-auto">
+          <h6 class="my-0">Street Widths</h6>
+        </div>
+        <div class="col-lg-12 col-md-8 col-sm-8 col-8">
+          <button class="btn btn-outline-primary btn-sm" ng-repeat="(city, value) in cities" ng-class="{'active':streets == city}" ng-click="chooseCity('streets',city);">{{ citiesShort[city] }}</button>
+        </div>
       </div>
     </div>
-    <div class="col-lg-2 text-center"
+    <div class="col-lg-2 text-center">
       <div class="w-100" aria-labelledby="dropdownMenuButton">
         <button class="btn btn-outline-primary">See Metrics</button>
       </div>

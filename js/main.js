@@ -266,7 +266,8 @@ app.controller('PageCtrl', function ($scope) {
     // directionalLight1.shadow.camera.fov = 2000;
 
     var shadowCameraHelper = new THREE.CameraHelper(directionalLight1.shadow.camera);
-    shadowCameraHelper.visible = true;
+    shadowCameraHelper.visible = false;
+    shadowCameraHelper.name = "directionalLight1Helper"
     scene.add( shadowCameraHelper );
 
     var directionalLight2 = new THREE.DirectionalLight( 0x87c0ff, .2);
@@ -565,6 +566,7 @@ app.controller('PageCtrl', function ($scope) {
     lghtng.add( scene.getObjectByName( 'directionalLight1' ).position, 'x', -2000, 2000);
     lghtng.add( scene.getObjectByName( 'directionalLight1' ).position, 'y', 0, 2000);
     lghtng.add( scene.getObjectByName( 'directionalLight1' ).position, 'z', -2000, 2000);
+    lghtng.add( scene.getObjectByName( 'directionalLight1Helper' ), 'visible');
     lghtng.addColor( params, 'colorDirLight2' )
       .onChange( function() { scene.getObjectByName( 'directionalLight2' ).color.set( params.colorDirLight2 ); } );
     lghtng.add( scene.getObjectByName( 'directionalLight2' ), 'intensity', 0, 3);

@@ -314,8 +314,8 @@ app.controller('PageCtrl', function ($scope) {
         angle = THREE.Math.degToRad(landmarks.London[i].rotation)
         visibility = landmarks[city][i].visible
         // visibility = true
-        console.log(city + '_landmark' + String(i+1))
-        objLoader(city + '_landmark' + String(i+1), city + '_landmark' + String(i+1),  0xffd2c0, 1, [px,py,pz], angle, visibility, true, true);
+        console.log(city.toLowerCase() + '_landmark' + String(i+1))
+        objLoader(city.toLowerCase() + '_landmark' + String(i+1), city + '_landmark' + String(i+1),  0xffd2c0, 1, [px,py,pz], angle, visibility, true, true);
       }
     }
 

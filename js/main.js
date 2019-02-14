@@ -305,6 +305,7 @@ app.controller('PageCtrl', function ($scope) {
     objLoader('parks_' + pad(0, 5), 'parks',  0x74ac73, 1, [0,0,0], 0, true, false, true);
     objLoader('curbs_' + pad(0, 5), 'curbs',  0xc7c7c7, 1, [0,0,0], 0, true, false, true);
 
+    // testing git update
     // import all landmarks and place in correct location
     for (var city in landmarks) {
       for (i=0; i<landmarks[city].length; i++) {
